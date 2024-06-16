@@ -1,0 +1,85 @@
+import React, {  useState } from 'react'
+import { Toaster,toast } from 'react-hot-toast';
+
+const QueryForm = () => {
+   const [email,setemail] =useState("")
+   const [text,settext] = useState("")
+  function handleform(e) {
+    e.preventDefault();
+    console.log({ email , text });
+    fetch("http://localhost:5000/querysform", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email,text }),
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+      toast.success("Query Sent")
+    }
+     
+    return (
+        <>
+        <Toaster/>
+          <section class="bg-gray-700 dark:bg-gray-900">
+            <div class="py-8 lg:py-16 px-4 mx-auto max-w-screen-md">
+              <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-center text-gray-900 dark:text-white">
+                Query Form
+              </h2>
+              <form action="#" onSubmit={handleform} class="space-y-8">
+                <div>
+                  <label
+                    for="email"
+                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  >
+                    Your email
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 dark:shadow-sm-light"
+                    placeholder="Enter Email" 
+                    value={email}
+                    onChange={(e)=>{setemail(e.target.value)}}
+                    required
+                  />
+                </div>
+                <div>
+                </div>
+                <div class="sm:col-span-2">
+                  <label
+                    for="message"
+                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400"
+                  >
+                    Your Query
+                  </label>
+                  <textarea
+                    value={text}
+                    onChange={(e)=>{settext(e.target.value)}}
+                    id="message"
+                    rows="6"
+                    class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg shadow-sm border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                    placeholder="Leave a Query..."
+                  ></textarea>
+                </div>
+                <button
+                  type="submit"
+                  class="py-3 px-5 text-sm font-medium text-center text-white rounded-lg bg-green-700 sm:w-fit hover:bg-blue-800 focus:ring-2 focus:outline-none focus:ring-gray-300 dark:bg-green-600 dark:hover:bg-success-700 dark:focus:ring-green-800"
+                >
+                  Send message
+                </button>
+              </form>
+            </div>
+          </section>
+        </>
+      );
+}
+ export default QueryForm;

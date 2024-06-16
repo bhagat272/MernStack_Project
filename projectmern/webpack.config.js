@@ -1,0 +1,6 @@
+devServer: {
+    // ...
+    allowedHosts: 'all',
+    // ...
+  }
+  

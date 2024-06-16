@@ -1,0 +1,36 @@
+{
+    "version": 2,
+    "builds": [
+      {
+        "src": "api/server.js",
+        "use": "@vercel/node"
+      },
+      {
+        "src": "projectmern/package.json",
+        "use": "@vercel/static-build",
+        "config": {
+          "distDir": "projectmern/build"
+        }
+      }
+    ],
+    "routes": [
+      {
+        "src": "/api/(.*)",
+        "dest": "/api/server.js"
+      },
+      {
+        "src": "/(.*)",
+        "dest": "/projectmern/$1"
+      }
+    ],
+    "env": {
+      "MONGO_URI": "@mongo_uri",
+      "PORT": "@port",
+      "SMTP_HOST": "@smtp_host",
+      "SMTP_PORT": "@smtp_port",
+      "SMTP_SECURE": "@smtp_secure",
+      "SMTP_USER": "@smtp_user",
+      "SMTP_PASS": "@smtp_pass"
+    }
+  }
+  

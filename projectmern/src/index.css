@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+ 
+.form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* This will center the form vertically */
+  padding: 0 15px; /* This will give some space on the left and right side of the form */
+  background-color: rgb(11, 31, 87)
+}
+ 
+.text{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  font-family: Arial, Helvetica, sans-serif;
+}
+.form{
+  width: 90vh;
+  padding: 2rem;
+  background: hsla(190, 31%, 84%, 0.126);
+  border-radius: 22px 22px 22px 22px;
+}
+label{
+  font-weight: 600;
+  
+  text-transform: uppercase;
+ }
+ .Card:hover{
+  box-shadow: 12px 12px 12px 23px orange !important;
+ }
+ 
+ 
+.label{
+  color: wheat;
+}
+.gradient-custom {
+  /* fallback for old browsers */
+  background: #a91010;
+  
+    }
