@@ -48,7 +48,11 @@ mongoose
   });
 
 // Use routes
+
 server.use(router);
+server.get('/',(req,res)=>{
+  res.send("Backend");
+})
 
 // Start server
 
