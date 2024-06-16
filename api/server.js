@@ -1,3 +1,4 @@
+// Required modules
 require('dotenv').config(); // Load environment variables from .env file
 const express = require("express");
 const server = express();
@@ -6,31 +7,31 @@ const cors = require('cors');
 const multer = require('multer');
 const mongoose = require("mongoose");
 const path = require('path');
-const fs = require('fs'); // Required to ensure directory creation
+const fs = require('fs');
 
 // Middleware
 server.use(express.json());
 server.use(cors());
 
-// Serve static files from /tmp/uploads in Vercel (only for testing or temporary use)
-server.use('/uploads', express.static(path.join('/tmp', 'uploads')));
-
-// Multer setup
+// Multer setup with /tmp/uploads directory
 const storage = multer.diskStorage({
-  destination: function(req, file, cb) {
+  destination: function (req, file, cb) {
     const uploadPath = path.join('/tmp', 'uploads');
-    // Ensure the directory exists
+    // Ensure the /tmp/uploads directory exists
     if (!fs.existsSync(uploadPath)) {
       fs.mkdirSync(uploadPath, { recursive: true });
     }
     cb(null, uploadPath);
   },
-  filename: function(req, file, cb) {
+  filename: function (req, file, cb) {
     cb(null, Date.now() + '-' + file.originalname);
   }
 });
 
 const upload = multer({ storage: storage });
+
+// Serve static files from /tmp/uploads (if needed)
+server.use('/uploads', express.static(path.join('/tmp', 'uploads')));
 
 // MongoDB connection using environment variable
 mongoose
