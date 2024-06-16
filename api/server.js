@@ -6,33 +6,31 @@ const cors = require('cors');
 const multer = require('multer');
 const mongoose = require("mongoose");
 const path = require('path');
+const fs = require('fs'); // Required to ensure directory creation
 
 // Middleware
 server.use(express.json());
 server.use(cors());
-server.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Serve static files from /tmp/uploads in Vercel (only for testing or temporary use)
+server.use('/uploads', express.static(path.join('/tmp', 'uploads')));
 
 // Multer setup
 const storage = multer.diskStorage({
   destination: function(req, file, cb) {
-    cb(null, './uploads');
+    const uploadPath = path.join('/tmp', 'uploads');
+    // Ensure the directory exists
+    if (!fs.existsSync(uploadPath)) {
+      fs.mkdirSync(uploadPath, { recursive: true });
+    }
+    cb(null, uploadPath);
   },
   filename: function(req, file, cb) {
     cb(null, Date.now() + '-' + file.originalname);
   }
 });
+
 const upload = multer({ storage: storage });
-
-
-// mongoose
-//   .connect("mongodb://127.0.0.1:27017/project_mern")
-//   .then(() => {
-//     console.log("connected to database");
-//   })
-//   .catch((err) => {
-//     console.log(err);
-//   });
-
 
 // MongoDB connection using environment variable
 mongoose
@@ -48,14 +46,19 @@ mongoose
   });
 
 // Use routes
-
 server.use(router);
-server.get('/',(req,res)=>{
+
+server.get('/', (req, res) => {
   res.send("Backend");
-})
+});
+
+// Example route for file upload
+server.post('/upload', upload.single('file'), (req, res) => {
+  console.log(req.file);
+  res.send('File uploaded successfully!');
+});
 
 // Start server
-
 server.listen(process.env.PORT, () => {
   console.log(`server is running on port ${process.env.PORT}`);
 });
