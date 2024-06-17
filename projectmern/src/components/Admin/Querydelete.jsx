@@ -7,7 +7,7 @@ const Querydelete = () => {
    const {id} = useParams()
    const navigate = useNavigate()
   useEffect(()=>{
-    fetch(`http://localhost:5000/querydelete/${id}`,{
+    fetch(`https://mern-stack-project-rosy.vercel.app/${id}`,{
         method:'DELETE'
         })
         .then(res=>{return res.json()})
