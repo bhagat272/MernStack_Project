@@ -7,7 +7,7 @@ const QueryForm = () => {
   function handleform(e) {
     e.preventDefault();
     console.log({ email , text });
-    fetch("http://localhost:5000/querysform", {
+    fetch("https://mern-stack-project-rosy.vercel.app/querysform", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
