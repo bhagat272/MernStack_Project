@@ -13,7 +13,7 @@ const Login = () => {
   function handleform(e) {
     e.preventDefault();
     console.log({ username, password });
-    fetch("http://localhost:5000/checkuser", {
+    fetch("https://mern-stack-project-rosy.vercel.app/checkuser", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
