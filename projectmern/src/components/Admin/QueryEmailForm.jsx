@@ -14,7 +14,7 @@ const QueryEmailForm = () => {
  function handlesubmit(e){
   e.preventDefault()
   console.table({mailfrom,useremail,mailsub,mailbody}) 
-  fetch('http://localhost:5000/queryreply',{
+  fetch('https://mern-stack-project-rosy.vercel.app/queryreply',{
     method:'POST',
     headers:{"Content-Type":"application/json"},
     body:JSON.stringify({mailfrom,useremail,mailsub,mailbody})
@@ -30,7 +30,7 @@ const QueryEmailForm = () => {
 
 
   useEffect(() => {
-    fetch(`http://localhost:5000/queryemail/${id}`)
+    fetch(`https://mern-stack-project-rosy.vercel.app/${id}`)
         .then((res) => res.json())
         .then((data) => {
             setuseremail(data.email); 
