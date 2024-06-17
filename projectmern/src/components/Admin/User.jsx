@@ -9,7 +9,7 @@ const User = () => {
   
 
   useEffect(() => {
-    fetch('http://localhost:5000/userlist')
+    fetch('https://mern-stack-project-rosy.vercel.app/userlist')
       .then((res) => res.json())
       .then((data) => setRecord(data))
       .catch((err) => console.log(err));
@@ -17,7 +17,7 @@ const User = () => {
 
   function handleSuspend(id) {
     // Corrected the parameter name to userId
-    fetch(`http://localhost:5000/userstatus/${id}`)
+    fetch(`https://mern-stack-project-rosy.vercel.app/${id}`)
       .then((res) => res.json())
       .then((data) => console.log(data))
       .catch((err) => console.error(err)); // Handle any errors
