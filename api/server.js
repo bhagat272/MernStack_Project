@@ -1,57 +1,49 @@
- require('dotenv').config(); // Load environment variables from .env file
+require('dotenv').config(); // Load environment variables from .env file
 const express = require("express");
 const server = express();
-const router = require("./routes/api");
 const cors = require('cors');
 const multer = require('multer');
-const mongoose = require("mongoose");
 const path = require('path');
+const fs = require('fs');
 
 // Middleware
 server.use(express.json());
 server.use(cors());
-server.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Multer setup
+// Multer Local Storage Configuration
 const storage = multer.diskStorage({
-  destination: function(req, file, cb) {
-    cb(null, './uploads');
+  destination: function (req, file, cb) {
+    const uploadPath = './uploads';
+    if (!fs.existsSync(uploadPath)) {
+      fs.mkdirSync(uploadPath);
+    }
+    cb(null, uploadPath);
   },
-  filename: function(req, file, cb) {
+  filename: function (req, file, cb) {
     cb(null, Date.now() + '-' + file.originalname);
   }
 });
+
 const upload = multer({ storage: storage });
 
+// Example route for uploading files
+server.post('/upload', upload.single('file'), (req, res) => {
+  try {
+    const filePath = path.join(__dirname, 'uploads', req.file.filename);
+    res.status(200).send({
+      message: "File uploaded successfully",
+      fileUrl: `http://localhost:${process.env.PORT}/uploads/${req.file.filename}` // URL to access the uploaded file
+    });
+  } catch (error) {
+    res.status(500).send({ message: "Error uploading file", error });
+  }
+});
 
-// mongoose
-//   .connect("mongodb://127.0.0.1:27017/project_mern")
-//   .then(() => {
-//     console.log("connected to database");
-//   })
-//   .catch((err) => {
-//     console.log(err);
-//   });
-
-
-// MongoDB connection using environment variable
-mongoose
-  .connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  })
-  .then(() => {
-    console.log("connected to database");
-  })
-  .catch((err) => {
-    console.log("Database connection error:", err.message);
-  });
-
-// Use routes
-server.use(router);
+// Serve static files in the 'uploads' directory
+server.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Start server
-
-server.listen(process.env.PORT, () => {
-  console.log(`server is running on port ${process.env.PORT}`);
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
