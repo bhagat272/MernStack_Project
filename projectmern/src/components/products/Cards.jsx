@@ -15,7 +15,7 @@ export default function Cards() {
   const { cart, setCart } = useContext(CartContext); // Use CartContext to access cart state
 
   useEffect(() => {
-    fetch("http://localhost:5000/productinstock")
+    fetch("https://mern-stack-project-rosy.vercel.app/productinstock")
       .then((res) => res.json())
       .then((data) => {
         console.log("Fetched Data:", data); // Log data to check for duplicate keys
