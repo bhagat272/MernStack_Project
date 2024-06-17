@@ -27,7 +27,7 @@ const Productsform = () => {
     formData.append("Stock", Stock);
     formData.append("productImage", productImage);
 
-    fetch("http://localhost:5000/productsformdata", {
+    fetch("https://mern-stack-project-rosy.vercel.app/productsformdata", {
       method: "POST",
       body: formData
     })
