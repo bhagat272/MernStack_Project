@@ -2,40 +2,98 @@ const ProductTable = require("../models/Product");
 const nodemailer = require("nodemailer");
 const Reg = require("../models/reg");
 const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
 const path = require("path");
 const fs = require("fs");
-
-// Ensure /tmp/uploads directory exists
-const UPLOAD_DIR = path.join("/tmp", "uploads");
-if (!fs.existsSync(UPLOAD_DIR)) {
-  fs.mkdirSync(UPLOAD_DIR, { recursive: true });
-}
-
-// Updated multer storage configuration to use /tmp/uploads
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, UPLOAD_DIR); // Use /tmp/uploads as the destination
+    cb(null, "./uploads"); // Destination folder
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now() + "-" + file.originalname); // Name the file with the current timestamp
-  }
+    cb(null, Date.now() + "-" + file.originalname); // Filename
+  },
 });
 
-const upload = multer({ storage: storage });
+// exports.productinsertController = async(req, res) => {
+//     const { Pname, Pprice, Pdesc,Stock } = req.body;
 
+//     // Check if any of the fields are empty
+//     if (!Pname || !Pprice || !Pdesc || !Stock) {
+//         return res.status(400).json({ message: "!!  Please enter data  !!"});
+//     }
+
+//     const record = new ProductTable({
+//         ProductName: Pname,
+//         ProductPrice: Pprice,
+//         ProductDesc: Pdesc,
+//         Stock:Stock
+//     });
+
+//     await record.save();
+//     res.json(record);
+// }
 // Properly apply the multer middleware to handle file uploads
-server.use('/uploads', express.static(path.join('/tmp', 'uploads')));
+exports.productinsertController = [
+  upload.single("productImage"),
+  async (req, res) => {
+    try {
+      const { Pname, Pprice, Pdesc, Stock } = req.body;
+      const productImage = req.file ? req.file.path : null;
+
+      // Check if any of the required fields are empty
+      if (!Pname || !Pprice || !Pdesc || !Stock || !productImage) {
+        return res.status(400).json({ message: "!! Please enter data !!" });
+      }
+
+      const record = new ProductTable({
+        ProductName: Pname,
+        ProductPrice: Pprice,
+        ProductDesc: Pdesc,
+        Stock: Stock,
+        ProductImage: productImage, // Save the path to the image
+      });
+
+      await record.save();
+      res.json(record);
+    } catch (error) {
+      console.error("Error inserting product:", error);
+      res.status(500).json({ message: "Error inserting product" });
+    }
+  },
+];
 
 exports.productdataController = async (req, res) => {
   const record = await ProductTable.find();
   res.json(record);
 };
-
 exports.updateformController = async (req, res) => {
   const ProductId = req.params.Productid;
   const record = await ProductTable.findById(ProductId);
   res.json(record);
 };
+// exports.updateproductController = async (req, res) => {
+//     try {
+//         const id = req.params.id;
+//         const { Pname, Pdesc, Pprice , Stock } = req.body;
+
+//         // Validate that all required fields are provided
+//         if (!Pname || !Pdesc || !Pprice || !Stock) {
+//             return res.status(400).json({ message: 'Please fill in all required fields.' });
+//         }
+
+//         // Find the product by ID and update its details
+//         const updatedProduct = await ProductTable.findByIdAndUpdate(
+//             id,
+//             { ProductName: Pname, ProductDesc: Pdesc, ProductPrice: Pprice , Stock:Stock },
+//             { new: true } // Return the updated product
+//         );
+
+//         res.json(updatedProduct);
+//     } catch (error) {
+//         console.error('Error updating product:', error);
+//         res.status(500).json({ message: 'Error updating product' });
+//     }
+// };
 
 exports.updateproductController = [
   upload.single("productImage"), // Middleware to handle single file upload
@@ -70,7 +128,11 @@ exports.updateproductController = [
 
         // Optionally delete the old image file if it exists
         if (product.ProductImage) {
-          const oldImagePath = path.join("/tmp", product.ProductImage);
+          const oldImagePath = path.join(
+            __dirname,
+            "../",
+            product.ProductImage
+          ); // Adjust the path as necessary
           fs.unlink(oldImagePath, (err) => {
             if (err) console.error("Error deleting old image:", err);
           });
@@ -100,11 +162,11 @@ exports.deleteproductController = async (req, res) => {
   const record = await ProductTable.findByIdAndDelete(id);
   res.json({ message: "Successfully Product Deleted" });
 };
-
 exports.productInstockController = async (req, res) => {
   const record = await ProductTable.find({ Stock: "In-Stock" });
   res.json(record);
 };
+
 
 exports.queryreplyController = async (req, res) => {
   // Extract email details from the request body
@@ -144,7 +206,6 @@ exports.UserlistController = async (req, res) => {
   const userlist = await Reg.find().sort({ regdate: -1 });
   res.json(userlist);
 };
-
 exports.userstatusController = async (req, res) => {
   const id = req.params.id;
   const record = await Reg.findById(id);
