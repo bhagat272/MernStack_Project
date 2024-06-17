@@ -11,7 +11,7 @@ const Query = () => {
   const {id} = useParams()
   const fetchData = async () => {
     try {
-      const response = await fetch("http://localhost:5000/querysdata");
+      const response = await fetch("https://mern-stack-project-rosy.vercel.app/querysdata");
       const data = await response.json();
       // Initialize the isRead property for each message
       const updatedData = data.map((msg) => ({ ...msg, isRead: false }));
