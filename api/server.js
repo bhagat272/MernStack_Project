@@ -23,17 +23,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
-
-// mongoose
-//   .connect("mongodb://127.0.0.1:27017/project_mern")
-//   .then(() => {
-//     console.log("connected to database");
-//   })
-//   .catch((err) => {
-//     console.log(err);
-//   });
-
-
+ 
 // MongoDB connection using environment variable
 mongoose
   .connect(process.env.MONGO_URI, {
