@@ -9,7 +9,7 @@ const Reg = () => {
  const[message,setmessage]=useState("")
   function handleform(e) {
     e.preventDefault();
-    fetch("http://localhost:5000/register", {
+    fetch("https://mern-stack-project-rosy.vercel.app/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password }),
