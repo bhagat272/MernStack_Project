@@ -24,34 +24,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // Properly apply the multer middleware to handle file uploads
-exports.productinsertController = [
-  upload.single("productImage"),
-  async (req, res) => {
-    try {
-      const { Pname, Pprice, Pdesc, Stock } = req.body;
-      const productImage = req.file ? req.file.path : null;
-
-      // Check if any of the required fields are empty
-      if (!Pname || !Pprice || !Pdesc || !Stock || !productImage) {
-        return res.status(400).json({ message: "!! Please enter data !!" });
-      }
-
-      const record = new ProductTable({
-        ProductName: Pname,
-        ProductPrice: Pprice,
-        ProductDesc: Pdesc,
-        Stock: Stock,
-        ProductImage: productImage, // Save the path to the image
-      });
-
-      await record.save();
-      res.json(record);
-    } catch (error) {
-      console.error("Error inserting product:", error);
-      res.status(500).json({ message: "Error inserting product" });
-    }
-  },
-];
+server.use('/uploads', express.static(path.join('/tmp', 'uploads')));
 
 exports.productdataController = async (req, res) => {
   const record = await ProductTable.find();
