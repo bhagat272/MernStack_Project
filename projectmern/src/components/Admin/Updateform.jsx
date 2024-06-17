@@ -13,7 +13,7 @@ const Updateform = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`http://localhost:5000/updateformdata/${id}`)
+    fetch(`https://mern-stack-project-rosy.vercel.app/${id}`)
       .then((res) => res.json())
       .then((data) => {
         setPname(data.ProductName);
@@ -39,7 +39,7 @@ const Updateform = () => {
       formData.append("productImage", ProductImage); // Add the image file to the form data
     }
 
-    fetch(`http://localhost:5000/updateproductdata/${id}`, {
+    fetch(`https://mern-stack-project-rosy.vercel.app/${id}`, {
       method: "PUT",
       body: formData, // Send form data including the image file
     })
