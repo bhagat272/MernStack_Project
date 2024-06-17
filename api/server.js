@@ -1,5 +1,4 @@
-// Required modules
-require('dotenv').config(); // Load environment variables from .env file
+ require('dotenv').config(); // Load environment variables from .env file
 const express = require("express");
 const server = express();
 const router = require("./routes/api");
@@ -7,31 +6,33 @@ const cors = require('cors');
 const multer = require('multer');
 const mongoose = require("mongoose");
 const path = require('path');
-const fs = require('fs');
 
 // Middleware
 server.use(express.json());
 server.use(cors());
+server.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Multer setup with /tmp/uploads directory
+// Multer setup
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    const uploadPath = path.join('/tmp', 'uploads');
-    // Ensure the /tmp/uploads directory exists
-    if (!fs.existsSync(uploadPath)) {
-      fs.mkdirSync(uploadPath, { recursive: true });
-    }
-    cb(null, uploadPath);
+  destination: function(req, file, cb) {
+    cb(null, './uploads');
   },
-  filename: function (req, file, cb) {
+  filename: function(req, file, cb) {
     cb(null, Date.now() + '-' + file.originalname);
   }
 });
-
 const upload = multer({ storage: storage });
 
-// Serve static files from /tmp/uploads (if needed)
-server.use('/uploads', express.static(path.join('/tmp', 'uploads')));
+
+// mongoose
+//   .connect("mongodb://127.0.0.1:27017/project_mern")
+//   .then(() => {
+//     console.log("connected to database");
+//   })
+//   .catch((err) => {
+//     console.log(err);
+//   });
+
 
 // MongoDB connection using environment variable
 mongoose
@@ -49,17 +50,8 @@ mongoose
 // Use routes
 server.use(router);
 
-server.get('/', (req, res) => {
-  res.send("Backend");
-});
-
-// Example route for file upload
-server.post('/upload', upload.single('file'), (req, res) => {
-  console.log(req.file);
-  res.send('File uploaded successfully!');
-});
-
 // Start server
+
 server.listen(process.env.PORT, () => {
   console.log(`server is running on port ${process.env.PORT}`);
 });
