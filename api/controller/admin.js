@@ -64,6 +64,7 @@ exports.productdataController = async (req, res) => {
 exports.updateformController = async (req, res) => {
   const ProductId = req.params.Productid;
   const record = await ProductTable.findById(ProductId);
+  console.log(record)
   res.json(record);
 };
 

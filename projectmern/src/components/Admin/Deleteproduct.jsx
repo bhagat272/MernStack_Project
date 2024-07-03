@@ -7,7 +7,7 @@ const Deleteproduct = () => {
    const {id} = useParams()
    const navigate = useNavigate()
   useEffect(()=>{
-    fetch(`https://mern-stack-project-rosy.vercel.app/${id}`,{
+    fetch(`https://mern-stack-project-rosy.vercel.app/productdelete/${id}`,{
         method:'DELETE'
         })
         .then(res=>{return res.json()})

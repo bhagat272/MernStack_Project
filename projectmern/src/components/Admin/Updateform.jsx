@@ -13,7 +13,7 @@ const Updateform = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`https://mern-stack-project-rosy.vercel.app/${id}`)
+    fetch(`https://mern-stack-project-rosy.vercel.app/updateformdata/${id}`)
       .then((res) => res.json())
       .then((data) => {
         setPname(data.ProductName);
@@ -39,7 +39,7 @@ const Updateform = () => {
       formData.append("productImage", ProductImage); // Add the image file to the form data
     }
 
-    fetch(`https://mern-stack-project-rosy.vercel.app/${id}`, {
+    fetch(`https://mern-stack-project-rosy.vercel.app/updateproductdata/${id}`, {
       method: "PUT",
       body: formData, // Send form data including the image file
     })
@@ -110,12 +110,12 @@ const Updateform = () => {
           <Button className="mt-4" type="submit" variant="contained" color="primary">
             Update Product &nbsp;
             <svg
-              className="mb-1"
+              className="mb-1 bi bi-bag-check-fill"
               xmlns="http://www.w3.org/2000/svg"
               width="16"
               height="16"
               fill="currentColor"
-              className="bi bi-bag-check-fill"
+              
               viewBox="0 0 16 16"
               style={{ verticalAlign: "middle" }}
             >
