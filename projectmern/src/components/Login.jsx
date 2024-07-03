@@ -12,7 +12,7 @@ const Login = () => {
 
   function handleform(e) {
     e.preventDefault();
-    console.log({ username, password });
+    
     fetch("https://mern-stack-project-rosy.vercel.app/checkuser", {
       method: "POST",
       headers: {
