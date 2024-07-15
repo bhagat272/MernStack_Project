@@ -49,7 +49,7 @@ export default function Cards() {
             <CardOverflow>
               <AspectRatio sx={{ minWidth: 200 }}>
                 <img
-                  src={`https://mern-stack-project-rosy.vercel.app/${item.ProductImage}`} // Use the dynamic URL to the product image
+                  src={item.ProductImage} // Use the dynamic URL to the product image
                   loading="lazy"
                   alt={item.ProductName}
                 />
