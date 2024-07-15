@@ -85,7 +85,7 @@ const Cart = () => {
                         className="bg-image rounded hover-zoom hover-overlay"
                       >
                         <img
-                          src={`https://mern-stack-project-rosy.vercel.app/${item.ProductImage}`}
+                          src={item.ProductImage}
                           className="w-100"
                           alt={item.ProductName}
                         />
