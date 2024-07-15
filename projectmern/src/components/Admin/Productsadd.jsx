@@ -81,7 +81,7 @@ const Productsadd = () => {
                   <td style={{ border: "1px solid black" }}>
                     {/* Display the product image */}
                     <img
-                      src={`http://localhost:5000/${item.ProductImage}`} // Use the image path from the server
+                      src={item.ProductImage} // Use the image path from the server
                       alt={item.ProductName}
                       style={{ width: "100px", height: "80px", objectFit: "cover" }}
                     />
